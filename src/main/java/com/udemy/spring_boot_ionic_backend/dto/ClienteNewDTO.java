@@ -1,7 +1,9 @@
 package com.udemy.spring_boot_ionic_backend.dto;
 
 import java.io.Serializable;
+import com.udemy.spring_boot_ionic_backend.services.validation.ClienteInsert;
 
+@ClienteInsert
 public class ClienteNewDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
