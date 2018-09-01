@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.udemy.spring_boot_ionic_backend.domain.Categoria;
@@ -58,6 +59,9 @@ public class DBService {
 	
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;	
+	
+	@Autowired
+	private BCryptPasswordEncoder pe;
 	
 	public void instantiateTestDataBase() throws Exception {
 		Categoria cat1 = new Categoria(null, "Informática");
@@ -114,7 +118,7 @@ public class DBService {
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 		
-		Cliente cli1 = new Cliente(null, "Maria Silva", "rafael.dantas.exesistemas@gmail.com", "123456", TipoCliente.PESSOAFISICA);		
+		Cliente cli1 = new Cliente(null, "Maria Silva", "rafael.dantas.exesistemas@gmail.com", "123456", TipoCliente.PESSOAFISICA, pe.encode("123"));		
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "38220834", cli1, c1);
 		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
 		
