@@ -16,11 +16,14 @@ import org.springframework.stereotype.Service;
 import com.udemy.spring_boot_ionic_backend.domain.Cidade;
 import com.udemy.spring_boot_ionic_backend.domain.Cliente;
 import com.udemy.spring_boot_ionic_backend.domain.Endereco;
+import com.udemy.spring_boot_ionic_backend.domain.enums.Perfil;
 import com.udemy.spring_boot_ionic_backend.domain.enums.TipoCliente;
 import com.udemy.spring_boot_ionic_backend.dto.ClienteDTO;
 import com.udemy.spring_boot_ionic_backend.dto.ClienteNewDTO;
 import com.udemy.spring_boot_ionic_backend.repositories.ClienteRepository;
 import com.udemy.spring_boot_ionic_backend.repositories.EnderecoRepository;
+import com.udemy.spring_boot_ionic_backend.security.UserSS;
+import com.udemy.spring_boot_ionic_backend.services.exceptions.AuthorizationException;
 import com.udemy.spring_boot_ionic_backend.services.exceptions.DataIntegrityException;
 import com.udemy.spring_boot_ionic_backend.services.exceptions.ObjectNotFoundException;
 
@@ -37,6 +40,11 @@ public class ClienteService {
 	private BCryptPasswordEncoder pe;
 	
 	public Cliente find(Integer id) {
+		UserSS user = UserService.authenticated();
+		if (user==null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
 		Optional<Cliente> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: "+ Cliente.class.getName()));
