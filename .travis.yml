@@ -8,3 +8,11 @@ before_install:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: $SECRET_HEROKU
+  app: curso-spring-ionic-dantas
+  on:
+    repo: dantasrafael/spring_boot_ionic_backend  
